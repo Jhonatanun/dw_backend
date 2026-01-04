@@ -14,6 +14,7 @@ export const getServicios = async (req, res) => {
 };
 
 export const createServicio = async (req, res) => {
+   console.log('📥 BODY RECIBIDO:', req.body);
   const {
     fecha,
     tipo_servicio_id,
@@ -25,11 +26,7 @@ export const createServicio = async (req, res) => {
     observaciones
   } = req.body;
 
-  if (!tipo_servicio_id || !precio || !costo || !estado_id) {
-    return res.status(400).json({ message: 'Faltan datos obligatorios' });
-  }
-
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('servicios')
     .insert({
       fecha,
@@ -40,15 +37,16 @@ export const createServicio = async (req, res) => {
       forma_pago_id,
       estado_id,
       observaciones
-    });
+    })
+    .select()
+    .single();
 
   if (error) {
     return res.status(500).json({ error: error.message });
   }
 
-  res.status(201).json({ message: 'Servicio creado correctamente' });
+  res.status(201).json(data);
 };
-
 
 export const updateServicio = async (req, res) => {
   const { id } = req.params;
