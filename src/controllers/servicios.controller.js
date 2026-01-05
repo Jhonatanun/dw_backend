@@ -14,7 +14,7 @@ export const getServicios = async (req, res) => {
 };
 
 export const createServicio = async (req, res) => {
-   console.log('📥 BODY RECIBIDO:', req.body);
+   //console.log('📥 BODY RECIBIDO:', req.body);
   const {
     fecha,
     tipo_servicio_id,
