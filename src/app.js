@@ -10,11 +10,26 @@ import gastosRoutes from './routes/gastos.routes.js';
 const app = express();
 
 /* 🔥 CORS SIEMPRE ANTES DE LAS RUTAS 🔥 */
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://domiwash.netlify.app'
+];
+
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Permitir llamadas sin origin (Postman, curl, etc.)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type']
 }));
+
 
 app.use(express.json());
 
